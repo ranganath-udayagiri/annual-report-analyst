@@ -9,6 +9,8 @@ AI research assistant for Indian company annual reports, built step by step.
 | GET | /companies | 200 | — |
 | GET | /companies/{company_id} | 200 | 404 not found, 422 invalid id |
 | POST | /companies | 201 | 409 duplicate id, 422 invalid body |
+| PUT | /companies/{company_id} | 200 | 404 not found, 422 invalid body |
+| DELETE | /companies/{company_id} | 204 | 404 not found |
 
 ## Run locally
 
@@ -23,7 +25,7 @@ Then open http://127.0.0.1:8000/docs
 
 ## Roadmap
 
-- [x] Company API: list, get one, create (FastAPI + Pydantic)
+- [x] Company API: full CRUD (FastAPI + Pydantic)
 - [ ] PostgreSQL storage
 - [ ] Docker + cloud deploy
 - [ ] Structured extraction of key figures
