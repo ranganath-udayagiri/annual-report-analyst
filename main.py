@@ -1,4 +1,3 @@
-from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException          # NEW
 
@@ -18,6 +17,12 @@ companies = [
     {"id": 2, "name": "Infosys", "sector": "IT"},
 ]
 
+def find_company(company_id: int):
+    for c in companies:
+        if c["id"] == company_id:
+            return c
+    raise HTTPException(status_code=404, detail="Company not found")
+
 @app.get("/companies")
 def list_companies():
     return companies
@@ -32,24 +37,16 @@ def add_company(company: Company):
 
 @app.get("/companies/{company_id}")
 def get_company(company_id: int):
-    for c in companies:
-        if c["id"] == company_id:
-            return c
-    raise HTTPException(status_code=404, detail="Company not found")
+    return find_company(company_id)
 
 @app.put("/companies/{company_id}")
 def update_company(company_id: int, company: CompanyUpdate):
-    for c in companies:
-        if c["id"] == company_id:
-            c["name"] = company.name
-            c["sector"] = company.sector
-            return c
-    raise HTTPException(status_code=404, detail="Company not found")
+    c = find_company(company_id)
+    c["name"] = company.name
+    c["sector"] = company.sector
+    return c
 
 @app.delete("/companies/{company_id}", status_code=204)
 def delete_company(company_id: int):
-    for c in companies:
-        if c["id"] == company_id:
-            companies.remove(c)
-            return
-    raise HTTPException(status_code=404, detail="Company not found")
+    c = find_company(company_id)
+    companies.remove(c)
